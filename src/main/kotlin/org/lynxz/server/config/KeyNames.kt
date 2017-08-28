@@ -12,6 +12,7 @@ object KeyNames {
     val corpsecret = "corpsecret"
     val agentId = "agentId"
     val jiraUrl = "jira_borwse_url"
+    val defaultNoticeUserName="defaultNoticeUserName"
 
     val defaultAssignee = "defaultAssignee"
     val gitlabPushMergeBranch = "gitlab_push_merge_branch"

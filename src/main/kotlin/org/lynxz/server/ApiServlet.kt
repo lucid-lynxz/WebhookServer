@@ -66,6 +66,7 @@ class ApiServlet : HttpServlet() {
                 ConstantsPara.dd_corp_secret = getProperty(KeyNames.corpsecret)
                 ConstantsPara.dd_agent_id = getProperty(KeyNames.agentId)
                 ConstantsPara.jiraUrl = getProperty(KeyNames.jiraUrl)
+                ConstantsPara.defaultNoticeUserName = getProperty(KeyNames.defaultNoticeUserName)
                 println("the corp id is: ${ConstantsPara.dd_corp_id}")
             }
         }
