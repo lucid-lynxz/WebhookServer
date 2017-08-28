@@ -8,4 +8,6 @@ corpid=******
 corpsecret=******
 # 钉钉微应用id
 agentId=******
+# jira 详情面板网址前缀(带斜杠),其后添加jira bugId接口拼接成完整地址,若无请放空
+jira_borwse_url=http://jira.soundbus.tech/browse/
 ```

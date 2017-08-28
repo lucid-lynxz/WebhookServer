@@ -13,4 +13,5 @@ object ConstantsPara {
     var dd_corp_secret = ""
     var dd_agent_id = ""
     var accessToken = ""
+    var jiraUrl = ""
 }

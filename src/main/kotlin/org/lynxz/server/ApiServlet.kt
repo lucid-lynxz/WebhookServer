@@ -3,6 +3,7 @@ package org.lynxz.server
 import org.apache.logging.log4j.LogManager
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
+import org.lynxz.server.network.HttpManager
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
@@ -24,8 +25,8 @@ class ApiServlet : HttpServlet() {
         getConfigPath("config.properties").let {
             println("init configPath is $it \n${File(it).exists()}")
             loadConfig(it)
+            HttpManager.refreshAccessToken()
         }
-//        HttpManager.refreshAccessToken()
     }
 
     override fun doGet(req: HttpServletRequest?, resp: HttpServletResponse?) {
@@ -39,6 +40,7 @@ class ApiServlet : HttpServlet() {
     private fun processRequest(req: HttpServletRequest?, resp: HttpServletResponse?) {
         req?.characterEncoding = "UTF-8"
         getHeadersInfo(req)
+        Router.route(req)
         resp?.apply {
             characterEncoding = "UTF-8"
             // 返回给客户端的数据
@@ -49,6 +51,7 @@ class ApiServlet : HttpServlet() {
             }
         }
     }
+
 
     /**
      * 加载指定根目录下指定路径的属性文件
@@ -62,7 +65,8 @@ class ApiServlet : HttpServlet() {
                 ConstantsPara.dd_corp_id = getProperty(KeyNames.corpid)
                 ConstantsPara.dd_corp_secret = getProperty(KeyNames.corpsecret)
                 ConstantsPara.dd_agent_id = getProperty(KeyNames.agentId)
-                println("获取到的 corp id  =  ${ConstantsPara.dd_corp_id}")
+                ConstantsPara.jiraUrl = getProperty(KeyNames.jiraUrl)
+                println("the corp id is: ${ConstantsPara.dd_corp_id}")
             }
         }
     }
@@ -80,6 +84,6 @@ class ApiServlet : HttpServlet() {
                 put(key, request.getHeader(key))
             }
         }
-        println("${msec2date()} 获取的头部信息为: ${toString()}")
+        println("${msec2date()} header of this request: ${toString()}")
     }
 }
