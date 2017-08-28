@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by lynxz on 28/08/2017.
+ * 根据header头部信息,调用对应的处理类
  */
 object Router {
     fun route(req: HttpServletRequest?) {

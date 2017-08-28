@@ -14,4 +14,9 @@ object ConstantsPara {
     var dd_agent_id = ""
     var accessToken = ""
     var jiraUrl = ""
+
+    /**
+     * 若钉钉消息的收信人为空,则默认发给此人
+     * */
+    var defaultNoticeUserName = "lynxz"
 }
