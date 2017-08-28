@@ -10,6 +10,7 @@ import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import kotlin.collections.HashMap
 
 /**
  * Created by lynxz on 25/08/2017.
@@ -37,6 +38,7 @@ class ApiServlet : HttpServlet() {
 
     private fun processRequest(req: HttpServletRequest?, resp: HttpServletResponse?) {
         req?.characterEncoding = "UTF-8"
+        getHeadersInfo(req)
         resp?.apply {
             characterEncoding = "UTF-8"
             // 返回给客户端的数据
@@ -66,5 +68,18 @@ class ApiServlet : HttpServlet() {
     }
 
     //将配置文件放置于 src/main/webapp 目录下
-    fun getConfigPath(fileName: String): String = "${servletContext.getRealPath("/")}$fileName"
+    fun getConfigPath(fileName: String) = "${servletContext.getRealPath("/")}$fileName"
+
+    /**
+     * 获取header信息
+     */
+    private fun getHeadersInfo(request: HttpServletRequest?) = HashMap<String, String>().apply {
+        request?.headerNames?.let {
+            while (it.hasMoreElements()) {
+                val key = it.nextElement()
+                put(key, request.getHeader(key))
+            }
+        }
+        println("${msec2date()} 获取的头部信息为: ${toString()}")
+    }
 }
