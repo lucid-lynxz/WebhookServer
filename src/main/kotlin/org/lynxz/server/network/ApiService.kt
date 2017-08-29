@@ -1,10 +1,10 @@
 package org.lynxz.server.network
 
 import io.reactivex.Observable
-import org.lynxz.server.bean.AccessTokenBean
-import org.lynxz.server.bean.DepartmentListBean
-import org.lynxz.server.bean.DepartmentMemberListBean
+import org.lynxz.server.bean.*
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -31,5 +31,11 @@ interface ApiService {
      * */
     @GET("user/simplelist")
     fun getDepartmentMemberList(@Query("department_id") id: Int = 1): Observable<DepartmentMemberListBean>
+
+    /**
+     * [向指定用户发送普通文本消息](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.oavHEu&treeId=172&articleId=104973&docType=1#s2)
+     */
+    @POST("message/send")
+    fun sendTextMessage(@Body bean: MessageTextBean): Observable<MessageResponseBean>
 
 }

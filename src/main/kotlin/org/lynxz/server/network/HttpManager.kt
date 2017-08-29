@@ -10,8 +10,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.lynxz.server.bean.AccessTokenBean
 import org.lynxz.server.bean.DepartmentMemberListBean
+import org.lynxz.server.bean.MessageResponseBean
+import org.lynxz.server.bean.MessageTextBean
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
+import org.lynxz.server.config.MessageType
+import org.lynxz.server.msec2date
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -68,6 +72,7 @@ object HttpManager {
      * */
     fun refreshAccessToken() {
         apiService.getAccessToken(ConstantsPara.dd_corp_id, ConstantsPara.dd_corp_secret)
+                .retry(1)
                 .subscribe(object : Observer<AccessTokenBean> {
                     override fun onError(e: Throwable) {
                         e.printStackTrace()
@@ -107,6 +112,7 @@ object HttpManager {
                                 t2
                             })
                 }
+                .retry(1)
                 .subscribe(object : Observer<DepartmentMemberListBean> {
                     override fun onNext(t: DepartmentMemberListBean) {
                         ConstantsPara.departmentMemberMap.put(t.departmentId, t.userlist)
@@ -122,8 +128,47 @@ object HttpManager {
 
                     override fun onComplete() {
                         println("getDepartmentInfo onComplete:\n${ConstantsPara.departmentMemberMap.keys.forEach { println("departId: $it") }}")
+                        sendTextMessage(ConstantsPara.defaultNoticeUserName, "test from server")
                     }
                 })
+    }
+
+    /**
+     * 向指定用户[targetUserName]发送文本内容[message]
+     * 若目标用户名[targetUserName]为空,则发送给指定部门[departmentId]所有人,比如gitlab merge请求通过时,通知所有人
+     * */
+    fun sendTextMessage(targetUserName: String? = null, message: String = "", departmentId: Int = 1) {
+        ConstantsPara.departmentMemberMap[departmentId]?.apply {
+            stream().filter { targetUserName.isNullOrBlank() or it.name.equals(targetUserName, true) }
+                    .forEach {
+                        val textBean = MessageTextBean().apply {
+                            touser = it.userid
+                            agentid = ConstantsPara.dd_agent_id
+                            msgtype = MessageType.TEXT
+                            text = MessageTextBean.TextBean().apply {
+                                content = message
+                            }
+                        }
+                        apiService.sendTextMessage(textBean)
+                                .subscribe(object : Observer<MessageResponseBean> {
+                                    override fun onComplete() {
+                                    }
+
+                                    override fun onSubscribe(d: Disposable) {
+                                        addDisposable(d)
+                                    }
+
+                                    override fun onNext(t: MessageResponseBean) {
+                                        println("${msec2date()} sendTextMessage $t")
+                                    }
+
+                                    override fun onError(e: Throwable) {
+                                        e.printStackTrace()
+                                    }
+                                })
+                    }
+        }
+
     }
 
     fun addDisposable(d: Disposable) {

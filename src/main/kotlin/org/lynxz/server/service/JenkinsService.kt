@@ -1,8 +1,9 @@
 package org.lynxz.server.service
 
+import com.google.gson.Gson
 import org.lynxz.server.config.ConstantsPara
-import org.lynxz.server.convertBody
 import org.lynxz.server.msec2date
+import org.lynxz.server.network.HttpManager
 import org.lynxz.webhook.bean.JenkensUploadPygerBean
 import javax.servlet.http.HttpServletRequest
 
@@ -16,13 +17,13 @@ import javax.servlet.http.HttpServletRequest
 class JenkinsService : PlatformService {
     override fun process(req: HttpServletRequest?) {
         req?.let {
-            convertBody(req.inputStream, JenkensUploadPygerBean::class.java)?.let {
+            val msg = req.getParameter("msg")
+            Gson().fromJson<JenkensUploadPygerBean>(msg, JenkensUploadPygerBean::class.java)?.let {
                 // 发起 jenkins 打包的用户名,同时消息的接收方
                 // 注意 userName需要与钉钉后台通讯录中的用户名一致或者能够一一映射才可
                 val userName = req.getParameter("userName") ?: ConstantsPara.defaultNoticeUserName
-                val msg = req.getParameter("msg")
 
-                val sb = StringBuilder(100).apply {
+                StringBuilder(100).apply {
                     append("jenkins上传apk到蒲公英-code=${it.code}\n")
                     append("错误消息: ${it.message ?: "无"}")
                     it.data?.let {
@@ -32,8 +33,8 @@ class JenkinsService : PlatformService {
                         append("二维码链接: ${it.appQRCodeURL}\n")
                     }
                     append("服务器时间: ${msec2date()}")
+                    HttpManager.sendTextMessage(userName, toString())
                 }
-                println("JenkinsService message to dingding is:\n$sb")
             }
         }
     }

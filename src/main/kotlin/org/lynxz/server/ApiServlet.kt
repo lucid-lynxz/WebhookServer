@@ -6,12 +6,14 @@ import org.lynxz.server.config.KeyNames
 import org.lynxz.server.network.HttpManager
 import java.io.File
 import java.io.FileInputStream
+import java.io.InputStreamReader
 import java.util.*
 import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.collections.HashMap
+
 
 /**
  * Created by lynxz on 25/08/2017.
@@ -68,16 +70,19 @@ class ApiServlet : HttpServlet() {
      * @return 属性对象 Properties
      */
     private fun loadConfig(configPath: String) {
+
+
         if (File(configPath).exists()) {
             Properties().apply {
-                load(FileInputStream(File(configPath)))
+                load(InputStreamReader(FileInputStream(File(configPath)), "UTF-8"))
+//                load(FileInputStream(File(configPath)))
                 ConstantsPara.dd_corp_id = getProperty(KeyNames.corpid)
                 ConstantsPara.dd_corp_secret = getProperty(KeyNames.corpsecret)
                 ConstantsPara.dd_agent_id = getProperty(KeyNames.agentId)
                 ConstantsPara.jiraUrl = getProperty(KeyNames.jiraUrl)
                 ConstantsPara.defaultNoticeUserName = getProperty(KeyNames.defaultNoticeUserName)
                 ConstantsPara.targetMergeBranch = getProperty(KeyNames.gitlabPushMergeBranch)
-                println("the corp id is: ${ConstantsPara.dd_corp_id}")
+                println("the corp id is: ${ConstantsPara.dd_corp_id}  ,defaultNoticeUserName = ${ConstantsPara.defaultNoticeUserName}")
             }
         }
     }

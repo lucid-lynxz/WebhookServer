@@ -7,6 +7,7 @@ import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
 import org.lynxz.server.convertBody
 import org.lynxz.server.msec2date
+import org.lynxz.server.network.HttpManager
 import java.util.regex.Pattern
 import javax.servlet.http.HttpServletRequest
 
@@ -54,7 +55,7 @@ class GitlabService : PlatformService {
                         append("请求概要: ${objectAttributes.title}\n")
                         append("服务器时间: ${msec2date()}\n")
                         append("审核地址: ${objectAttributes.url}")
-//                        httpUtil.sendTextMsg(assignee.name, toString())
+                        HttpManager.sendTextMessage(it.assignee.name, toString())
                     }
 
                     Actions.CLOSE -> {// merge请求被关闭的时候,通知提交请求的人
@@ -63,7 +64,7 @@ class GitlabService : PlatformService {
                                 .append("目标分支: ${objectAttributes.target_branch}\n")
                                 .append("概要: ${objectAttributes.title}\n")
                                 .append("服务器时间: ${msec2date()}")
-//                        httpUtil.sendTextMsg(user.name, toString())
+                        HttpManager.sendTextMessage(user.name, toString())
                     }
 
                     Actions.MERGE -> {// merge请求被通过,通知相关所有人更新代码
@@ -77,6 +78,7 @@ class GitlabService : PlatformService {
                             append("分支: ${objectAttributes.target_branch}\n")
                             append("概要: ${objectAttributes.title}\n")
                             append("服务器时间: ${msec2date()}")
+                            // todo 通知部门所有人
 //                            httpUtil.sendTextMsg(null, toString(), Params.getDepartType(project.name))
                         }
                     }
@@ -89,11 +91,11 @@ class GitlabService : PlatformService {
                         append("请求概要: ${objectAttributes.title}\n")
                         append("服务器时间: ${msec2date()}\n")
                         append("审核地址: ${objectAttributes.url}")
-//                        httpUtil.sendTextMsg(assignee.name, toString())
+                        HttpManager.sendTextMessage(it.assignee.name, toString())
                     }
                 }
             }
-            println("processMergeHook msg to dingding is :\n$sb")
+//            println("processMergeHook msg to dingding is :\n$sb")
         }
     }
 

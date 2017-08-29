@@ -4,6 +4,7 @@ import org.lynxz.server.bean.JiraBugEventBean
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.convertBody
 import org.lynxz.server.msec2date
+import org.lynxz.server.network.HttpManager
 import java.io.IOException
 import javax.servlet.http.HttpServletRequest
 
@@ -35,7 +36,7 @@ class GiraService : PlatformService {
                 val summary = fields.summary// bug标题
                 val keyId = issue.key// bug编号,如 UPLUSGO-1241
                 val url = ConstantsPara.jiraUrl + keyId//issue详情访问网址
-                val assigneeName = fields.assignee.displayName//bug归属人
+                var assigneeName = fields.assignee.displayName//bug归属人
 
                 /*
                 * issue 状态信息
@@ -77,7 +78,9 @@ class GiraService : PlatformService {
                     append("服务器时间: ${msec2date()}")
                 }
 
-                println("要发送的jira信息为: $sb")
+//                println("要发送的jira信息为: $sb")
+                assigneeName = if (assigneeName.isNullOrBlank()) ConstantsPara.defaultNoticeUserName else assigneeName
+                HttpManager.sendTextMessage(assigneeName, sb.toString())
             }
         }
     }
