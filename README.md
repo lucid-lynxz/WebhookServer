@@ -13,4 +13,6 @@ agentId=123456
 defaultNoticeUserName="张三"
 # 可选,jira 详情面板网址前缀(带斜杠),其后添加jira bugId接口拼接成完整地址,若无请放空
 jira_borwse_url=http://jira.soundbus.tech/browse/
+# gitlab合并的目标分支是该分支时, 此hook请求才需要发送钉钉消息,不填的话,默认master
+gitlab_push_merge_branch=master
 ```
