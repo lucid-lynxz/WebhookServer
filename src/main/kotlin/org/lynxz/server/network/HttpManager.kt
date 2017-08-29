@@ -168,7 +168,6 @@ object HttpManager {
                                 })
                     }
         }
-
     }
 
     fun addDisposable(d: Disposable) {

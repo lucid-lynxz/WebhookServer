@@ -10,6 +10,7 @@ corpsecret=Bp1_HoQej2s******LE7aRWaJm_lYpSMYvVQi-_Q
 agentId=123456
 
 # 可选,gitlab默认通知审核的人员或者gira默认通知的bug归属人的真实名字,用于匹配钉钉通讯录获取userId
+# 同时也是蒲公英上传应用后回调通知的默认用户
 defaultNoticeUserName="张三"
 # 可选,jira 详情面板网址前缀(带斜杠),其后添加jira bugId接口拼接成完整地址,若无请放空
 jira_borwse_url=http://jira.soundbus.tech/browse/
