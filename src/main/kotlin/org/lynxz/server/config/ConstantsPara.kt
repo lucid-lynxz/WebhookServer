@@ -1,5 +1,8 @@
 package org.lynxz.server.config
 
+import org.lynxz.server.bean.DepartmentListBean
+import org.lynxz.server.bean.DepartmentMemberListBean
+
 /**
  * Created by lynxz on 25/08/2017.
  * 参数
@@ -14,6 +17,16 @@ object ConstantsPara {
     var dd_agent_id = ""
     var accessToken = ""
     var jiraUrl = ""
+
+
+    /**
+     * 钉钉部门群组
+     * */
+    var departmentList: DepartmentListBean? = null
+    /**
+     * 用于存储部门id以及部门内的成员信息
+     * */
+    val departmentMemberMap = hashMapOf<Int, List<DepartmentMemberListBean.UserlistBean>>()
 
     /**
      * 若钉钉消息的收信人为空,则默认发给此人

@@ -1,11 +1,15 @@
 package org.lynxz.server.network
 
+import io.reactivex.Observable
 import io.reactivex.Observer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.lynxz.server.bean.AccessTokenBean
+import org.lynxz.server.bean.DepartmentMemberListBean
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
 import retrofit2.Retrofit
@@ -57,6 +61,7 @@ object HttpManager {
 
     val apiService: ApiService = ddRetrofit.create(ApiService::class.java)
 
+    val compositeDisposable = CompositeDisposable()
 
     /**
      * 刷新钉钉accessToken
@@ -69,6 +74,7 @@ object HttpManager {
                     }
 
                     override fun onSubscribe(d: Disposable) {
+                        addDisposable(d)
                     }
 
                     override fun onComplete() {
@@ -76,9 +82,51 @@ object HttpManager {
 
                     override fun onNext(t: AccessTokenBean) {
                         println("refreshAccessToken $t")
+                        ConstantsPara.accessToken = t.access_token ?: ""
+                        // todo 若有上一次未发送成功的数据,则尝试发送
+                        getDepartmentInfo()
                     }
                 })
+    }
 
+    /**
+     * 获取部门列表信息以及各部门成员信息
+     */
+    fun getDepartmentInfo() {
+        apiService.getDepartmentList()
+                .flatMap { list ->
+                    ConstantsPara.departmentList = list
+                    Observable.fromIterable(list.department)
+                }
+                .map { departmentBean -> departmentBean.id }
+                .flatMap { departmentId ->
+                    Observable.zip(Observable.create({ it.onNext(departmentId) }),
+                            apiService.getDepartmentMemberList(departmentId),
+                            BiFunction<Int, DepartmentMemberListBean, DepartmentMemberListBean> { t1, t2 ->
+                                t2.departmentId = t1
+                                t2
+                            })
+                }
+                .subscribe(object : Observer<DepartmentMemberListBean> {
+                    override fun onNext(t: DepartmentMemberListBean) {
+                        ConstantsPara.departmentMemberMap.put(t.departmentId, t.userlist)
+                    }
 
+                    override fun onSubscribe(d: Disposable) {
+                        addDisposable(d)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onComplete() {
+                        println("getDepartmentInfo onComplete:\n${ConstantsPara.departmentMemberMap.keys.forEach { println("departId: $it") }}")
+                    }
+                })
+    }
+
+    fun addDisposable(d: Disposable) {
+        compositeDisposable.add(d)
     }
 }

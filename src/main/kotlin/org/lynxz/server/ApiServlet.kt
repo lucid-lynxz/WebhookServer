@@ -19,14 +19,23 @@ import kotlin.collections.HashMap
 class ApiServlet : HttpServlet() {
 
     private val logger = LogManager.getLogger()
+    val refreshTimer = Timer()
 
     override fun init(config: ServletConfig?) {
         super.init(config)
         getConfigPath("config.properties").let {
-            println("init configPath is $it \n${File(it).exists()}")
-            loadConfig(it)
+            // 避免多次初始化
+            if (ConstantsPara.dd_corp_id.isNullOrBlank()) {
+                println("init configPath is $it \n${File(it).exists()}")
+                loadConfig(it)
+                // access_token有效期7200秒
+                refreshTimer.schedule(object : TimerTask() {
+                    override fun run() {
+                        HttpManager.refreshAccessToken()
+                    }
+                }, 0, (60 * 60 * 1000).toLong())
+            }
         }
-        HttpManager.refreshAccessToken()
     }
 
     override fun doGet(req: HttpServletRequest?, resp: HttpServletResponse?) {

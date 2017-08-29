@@ -2,6 +2,8 @@ package org.lynxz.server.network
 
 import io.reactivex.Observable
 import org.lynxz.server.bean.AccessTokenBean
+import org.lynxz.server.bean.DepartmentListBean
+import org.lynxz.server.bean.DepartmentMemberListBean
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,4 +19,17 @@ interface ApiService {
      * */
     @GET("gettoken")
     fun getAccessToken(@Query("corpid") id: String, @Query("corpsecret") secret: String): Observable<AccessTokenBean>
+
+    /**
+     * [获取部门列表信息](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.xIVqtB&treeId=172&articleId=104979&docType=1#s0)
+     */
+    @GET("department/list")
+    fun getDepartmentList(): Observable<DepartmentListBean>
+
+    /**
+     * [获取指定部门的成员信息,默认获取全部成员](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.xIVqtB&treeId=172&articleId=104979&docType=1#s12)
+     * */
+    @GET("user/simplelist")
+    fun getDepartmentMemberList(@Query("department_id") id: Int = 1): Observable<DepartmentMemberListBean>
+
 }
