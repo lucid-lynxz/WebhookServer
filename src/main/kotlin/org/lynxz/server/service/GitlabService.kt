@@ -44,7 +44,7 @@ class GitlabService : PlatformService {
             println("processMergeHook action = " + action + " , url = " + objectAttributes.url)
             val user = it.user
             val project = it.project
-            val sb = StringBuilder(100).apply {
+            StringBuilder(100).apply {
                 when (action) {
 
                     Actions.OPEN, Actions.REOPEN, Actions.UPDATE -> {// 有新的merge请求时,通知审核人员审核
@@ -78,8 +78,7 @@ class GitlabService : PlatformService {
                             append("分支: ${objectAttributes.target_branch}\n")
                             append("概要: ${objectAttributes.title}\n")
                             append("服务器时间: ${msec2date()}")
-                            // todo 通知部门所有人
-//                            httpUtil.sendTextMsg(null, toString(), Params.getDepartType(project.name))
+                            HttpManager.sendTestMessageToDepartment(toString(), project.name, project.namespace)
                         }
                     }
 

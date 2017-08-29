@@ -5,6 +5,7 @@ import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.toObservable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -101,6 +102,7 @@ object HttpManager {
         apiService.getDepartmentList()
                 .flatMap { list ->
                     ConstantsPara.departmentList = list
+                    list.department.forEach { ConstantsPara.departmentNameMap.put(it.id, it.name) }
                     Observable.fromIterable(list.department)
                 }
                 .map { departmentBean -> departmentBean.id }
@@ -131,6 +133,29 @@ object HttpManager {
                         sendTextMessage(ConstantsPara.defaultNoticeUserName, "test from server")
                     }
                 })
+    }
+
+    /**
+     * 根据gitlab返回的项目组别和名称,发送消息给对应的部门群成员
+     * 钉钉部门名称与项目名称一致,切部门的上级部门与项目所在组的namespace一致,则可确定要通知的部门
+     *
+     * 如钉钉通讯录中有某群:  father/child , 部门名为 child, 上级部门为 father
+     * 而gitlab中有某项目地址为: https://gitlab.lynxz.org/father/child
+     * 则可完全确定所需通知的部门child
+     * 备注: 本项目只支持两级
+     * */
+    fun sendTestMessageToDepartment(msg: String = "", projectName: String = "", projectNameSpace: String = "") {
+        if (msg.isNullOrBlank() or projectName.isNullOrBlank()) {
+            return
+        }
+
+        // 由于钉钉部门名称不支持 "-" ,因此自动替换为 "_",创建通讯录时请注意
+        ConstantsPara.departmentList?.department?.toObservable()
+                ?.filter { (projectName.replace("-", "_") == it.name) and (projectNameSpace.replace("-", "_") == ConstantsPara.departmentNameMap[it.parentid]) }
+                ?.flatMap { bean -> Observable.just(ConstantsPara.departmentMemberMap[bean.id]) }
+                ?.flatMap { Observable.fromIterable(it) }
+                ?.doOnNext({ sendTextMessage(it.name, msg) })
+                ?.subscribe()
     }
 
     /**

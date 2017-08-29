@@ -20,6 +20,10 @@ object ConstantsPara {
 
 
     /**
+     * 用于记录部门id和部门名称之间的对应关系
+     * */
+    var departmentNameMap = hashMapOf<Int, String>()
+    /**
      * 钉钉部门群组
      * */
     var departmentList: DepartmentListBean? = null
