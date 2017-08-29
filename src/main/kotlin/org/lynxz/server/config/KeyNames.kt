@@ -30,8 +30,8 @@ object KeyNames {
     val HEADER_JENKINS_PGYER = "jenkins_upload_pgyer" // 自定义的jenkins打包完后上传到蒲公英后发送的通知
 
     // gitlab请求类型
-    val HEADER_GITLAB_MERGE_HOOK = "Merge Request Hook"
-    val HEADER_GITLAB_PUSH_HOOK = "Push Hook"
+    val HEADER_GITLAB_MERGE_HOOK = "merge request hook"
+    val HEADER_GITLAB_PUSH_HOOK = "push hook"
 
 
 }

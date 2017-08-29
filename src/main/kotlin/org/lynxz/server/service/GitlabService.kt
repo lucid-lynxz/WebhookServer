@@ -28,7 +28,7 @@ class GitlabService : PlatformService {
     private var lastMergeCommitSha: String? = ""
 
     override fun process(req: HttpServletRequest?) {
-        when (req?.getHeader(KeyNames.HEADER_GITLAB)) {
+        when (req?.getHeader(KeyNames.HEADER_GITLAB)?.toLowerCase()) {
             KeyNames.HEADER_GITLAB_PUSH_HOOK -> processPushHook(req)
             KeyNames.HEADER_GITLAB_MERGE_HOOK -> processMergeHook(req)
         }
