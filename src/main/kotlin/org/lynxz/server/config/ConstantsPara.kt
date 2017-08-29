@@ -19,4 +19,9 @@ object ConstantsPara {
      * 若钉钉消息的收信人为空,则默认发给此人
      * */
     var defaultNoticeUserName = "lynxz"
+
+    /**
+     * 处理gitlab push or merge hook时, 目标分支匹配时才认为是合并请求
+     * */
+    var targetMergeBranch = "master"
 }
