@@ -1,6 +1,6 @@
 group 'org.lynxz.server'
-version 'V0.1.0'
-description ""
+version 'V0.1.2'
+description "初版基本功能完成,发布测试"
 
 buildscript {
     ext {

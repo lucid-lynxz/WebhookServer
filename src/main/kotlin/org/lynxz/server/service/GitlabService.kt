@@ -94,7 +94,6 @@ class GitlabService : PlatformService {
                     }
                 }
             }
-//            println("processMergeHook msg to dingding is :\n$sb")
         }
     }
 
@@ -144,8 +143,8 @@ class GitlabService : PlatformService {
                     append("分支: ${ConstantsPara.targetMergeBranch}\n")
                     append("概要: mergeInfo\n")
                     append("服务器时间: ${msec2date()}")
+                    HttpManager.sendTestMessageToDepartment(toString(), it.project.name, it.project.namespace)
                 }
-                println("processPushHook msg to dingding is:\n$sb")
             }
         }
     }

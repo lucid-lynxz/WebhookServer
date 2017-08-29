@@ -155,6 +155,7 @@ object HttpManager {
                 ?.flatMap { bean -> Observable.just(ConstantsPara.departmentMemberMap[bean.id]) }
                 ?.flatMap { Observable.fromIterable(it) }
                 ?.doOnNext({ sendTextMessage(it.name, msg) })
+                ?.doOnSubscribe({ println("要群发给$projectNameSpace/$projectName 的消息是:\n${toString()}") })
                 ?.subscribe()
     }
 
