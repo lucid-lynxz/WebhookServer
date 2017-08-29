@@ -10,6 +10,7 @@
 *.ctxt
 .idea
 config.properties
+build
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

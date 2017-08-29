@@ -25,8 +25,8 @@ class ApiServlet : HttpServlet() {
         getConfigPath("config.properties").let {
             println("init configPath is $it \n${File(it).exists()}")
             loadConfig(it)
-            HttpManager.refreshAccessToken()
         }
+        HttpManager.refreshAccessToken()
     }
 
     override fun doGet(req: HttpServletRequest?, resp: HttpServletResponse?) {

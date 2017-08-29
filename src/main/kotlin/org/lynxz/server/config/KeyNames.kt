@@ -12,7 +12,11 @@ object KeyNames {
     val corpsecret = "corpsecret"
     val agentId = "agentId"
     val jiraUrl = "jira_borwse_url"
-    val defaultNoticeUserName="defaultNoticeUserName"
+    val defaultNoticeUserName = "defaultNoticeUserName"
+
+    // 与钉钉服务器通讯时,需要在url中添加query参数: access_token
+    val QUERY_KEY_ACCESS_TOKEN = "access_token"
+    val HEADER_KEY_CONTENT_TYPE = "Content-Type"
 
     val defaultAssignee = "defaultAssignee"
     val gitlabPushMergeBranch = "gitlab_push_merge_branch"
@@ -28,5 +32,6 @@ object KeyNames {
     // gitlab请求类型
     val HEADER_GITLAB_MERGE_HOOK = "Merge Request Hook"
     val HEADER_GITLAB_PUSH_HOOK = "Push Hook"
+
 
 }

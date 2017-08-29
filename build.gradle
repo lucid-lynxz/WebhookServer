@@ -31,6 +31,7 @@ apply plugin: 'war'
 sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
