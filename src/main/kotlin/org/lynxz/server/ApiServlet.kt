@@ -1,5 +1,6 @@
 package org.lynxz.server
 
+import io.reactivex.Observable
 import org.apache.logging.log4j.LogManager
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
@@ -8,6 +9,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.servlet.ServletConfig
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -21,7 +23,6 @@ import kotlin.collections.HashMap
 class ApiServlet : HttpServlet() {
 
     private val logger = LogManager.getLogger()
-    val refreshTimer = Timer()
 
     override fun init(config: ServletConfig?) {
         super.init(config)
@@ -31,11 +32,8 @@ class ApiServlet : HttpServlet() {
                 println("init configPath is $it \n${File(it).exists()}")
                 loadConfig(it)
                 // access_token有效期7200秒
-                refreshTimer.schedule(object : TimerTask() {
-                    override fun run() {
-                        HttpManager.refreshAccessToken()
-                    }
-                }, 0, (60 * 60 * 1000).toLong())
+                Observable.interval(0, 3600, TimeUnit.SECONDS)
+                        .subscribe { HttpManager.refreshAccessToken() }
             }
         }
     }

@@ -25,7 +25,7 @@ object Router {
                 } else if (!req.getHeader(KeyNames.HEADER_GITLAB).isNullOrBlank()) {
                     GitlabService().process(req)
                 } else {
-                    println("cannot process this type of request, ignore....")
+                    println("cannot process this type of request, ignore....${req.requestURL}")
                 }
             }
         }
