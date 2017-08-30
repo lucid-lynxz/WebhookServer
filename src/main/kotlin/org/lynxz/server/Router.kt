@@ -1,6 +1,8 @@
 package org.lynxz.server
 
 import org.lynxz.server.config.KeyNames
+import org.lynxz.server.config.PathInfo
+import org.lynxz.server.network.HttpManager
 import org.lynxz.server.service.GiraService
 import org.lynxz.server.service.GitlabService
 import org.lynxz.server.service.JenkinsService
@@ -25,7 +27,11 @@ object Router {
                 } else if (!req.getHeader(KeyNames.HEADER_GITLAB).isNullOrBlank()) {
                     GitlabService().process(req)
                 } else {
-                    println("cannot process this type of request, ignore....${req.requestURL}")
+                    when (req.pathInfo) {
+                        PathInfo.KEY_ACTION_REFRESH_TOKEN -> HttpManager.refreshAccessToken()
+                        PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO -> HttpManager.getDepartmentInfo()
+                        else -> println("cannot process this type of request, ignore....${req.requestURL}")
+                    }
                 }
             }
         }

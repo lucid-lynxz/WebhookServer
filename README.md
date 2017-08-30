@@ -27,3 +27,7 @@ gitlab_push_merge_branch=master
 * 在钉钉后台通讯录中需要先创建部门: `detail_android` ,然后创建其子部门 `demo_android`
   注意: 由于钉钉部门名称不允许使用 `-`,因此创建时改为 `_` 替代
 * 目前只支持两级部门结构,若有多个部门符合上述规则gitlab merge通过时会通知所有匹配的部门成员;
+
+### 3. 功能url
+1. `{serverHost}/action/refreshToken` 重新刷新access_token,并重新获取通讯录
+2. `{serverHost}/action/updateDepartmentInfo` 请求该url会立即重新获取钉钉通讯录信息,用于用户更新了钉钉通讯录后主动触发服务器刷新数据
