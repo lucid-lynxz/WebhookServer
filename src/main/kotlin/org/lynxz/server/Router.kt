@@ -27,9 +27,9 @@ object Router {
                 } else if (!req.getHeader(KeyNames.HEADER_GITLAB).isNullOrBlank()) {
                     GitlabService().process(req)
                 } else {
-                    when (req.pathInfo) {
-                        PathInfo.KEY_ACTION_REFRESH_TOKEN -> HttpManager.refreshAccessToken()
-                        PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO -> HttpManager.getDepartmentInfo()
+                    when {
+                        req.pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true) -> HttpManager.refreshAccessToken()
+                        req.pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true) -> HttpManager.getDepartmentInfo()
                         else -> println("cannot process this type of request, ignore....${req.requestURL}")
                     }
                 }
