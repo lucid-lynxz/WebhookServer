@@ -6,6 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.toObservable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -130,7 +131,7 @@ object HttpManager {
 
                     override fun onComplete() {
                         println("getDepartmentInfo onComplete:\n${ConstantsPara.departmentMemberMap.keys.forEach { println("departId: $it") }}")
-                        sendTextMessage(ConstantsPara.defaultNoticeUserName, "test from server")
+//                        sendTextMessage(ConstantsPara.defaultNoticeUserName, "test from server")
                     }
                 })
     }
@@ -151,11 +152,11 @@ object HttpManager {
 
         // 由于钉钉部门名称不支持 "-" ,因此自动替换为 "_",创建通讯录时请注意
         ConstantsPara.departmentList?.department?.toObservable()
-                ?.filter { (projectName.replace("-", "_") == it.name) and (projectNameSpace.replace("-", "_") == ConstantsPara.departmentNameMap[it.parentid]) }
+                ?.filter { (projectName.replace("-", "_").equals(it.name, true)) and (projectNameSpace.replace("-", "_").equals(ConstantsPara.departmentNameMap[it.parentid], true)) }
                 ?.flatMap { bean -> Observable.just(ConstantsPara.departmentMemberMap[bean.id]) }
                 ?.flatMap { Observable.fromIterable(it) }
                 ?.doOnNext({ sendTextMessage(it.name, msg) })
-                ?.doOnSubscribe({ println("要群发给$projectNameSpace/$projectName 的消息是:\n${toString()}") })
+                ?.doOnSubscribe({ println("要群发给 $projectNameSpace/$projectName 的消息是:\n${toString()}") })
                 ?.subscribe()
     }
 
@@ -176,6 +177,7 @@ object HttpManager {
                             }
                         }
                         apiService.sendTextMessage(textBean)
+                                .subscribeOn(Schedulers.io())
                                 .subscribe(object : Observer<MessageResponseBean> {
                                     override fun onComplete() {
                                     }

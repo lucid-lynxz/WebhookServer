@@ -11,6 +11,7 @@ import java.io.InputStreamReader
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.servlet.ServletConfig
+import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -19,7 +20,10 @@ import kotlin.collections.HashMap
 
 /**
  * Created by lynxz on 25/08/2017.
+ * 对所有请求进行处理
+ * 关于 [@WebServlet的使用](http://blog.csdn.net/maozi_bsz/article/details/46431189)
  */
+@WebServlet(name = "home", value = "/*", loadOnStartup = 1)
 class ApiServlet : HttpServlet() {
 
     private val logger = LogManager.getLogger()
@@ -54,6 +58,7 @@ class ApiServlet : HttpServlet() {
             characterEncoding = "UTF-8"
             // 返回给客户端的数据
             writer.apply {
+//                write("{\"serverTime\":\"${msec2date()}\"}") // 使用println(...) 等效
                 write("hello, I'm running... ${msec2date()}") // 使用println(...) 等效
                 flush()
                 close()
