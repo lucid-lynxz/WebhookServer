@@ -58,14 +58,13 @@ class ApiServlet : HttpServlet() {
             characterEncoding = "UTF-8"
             // 返回给客户端的数据
             writer.apply {
-//                write("{\"serverTime\":\"${msec2date()}\"}") // 使用println(...) 等效
-                write("hello, I'm running... ${msec2date()}") // 使用println(...) 等效
+                //                write("{\"serverTime\":\"${msec2date()}\"}") // 使用println(...) 等效
+                write("${msec2date()} hello, I'm running...") // 使用println(...) 等效
                 flush()
                 close()
             }
         }
     }
-
 
     /**
      * 加载指定根目录下指定路径的属性文件
@@ -73,8 +72,6 @@ class ApiServlet : HttpServlet() {
      * @return 属性对象 Properties
      */
     private fun loadConfig(configPath: String) {
-
-
         if (File(configPath).exists()) {
             Properties().apply {
                 load(InputStreamReader(FileInputStream(File(configPath)), "UTF-8"))

@@ -28,9 +28,12 @@ class GitlabService : PlatformService {
     private var lastMergeCommitSha: String? = ""
 
     override fun process(req: HttpServletRequest?) {
-        when (req?.getHeader(KeyNames.HEADER_GITLAB)?.toLowerCase()) {
+        val gitlabHookType = req?.getHeader(KeyNames.HEADER_GITLAB)
+        println("gitlabService gitlabHookType: ${gitlabHookType?.toLowerCase()}")
+        when (gitlabHookType?.toLowerCase()) {
             KeyNames.HEADER_GITLAB_PUSH_HOOK -> processPushHook(req)
             KeyNames.HEADER_GITLAB_MERGE_HOOK -> processMergeHook(req)
+            else -> println("GitlabService cannot  distinguish  $gitlabHookType")
         }
     }
 

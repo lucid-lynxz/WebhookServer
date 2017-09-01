@@ -18,6 +18,7 @@ fun msec2date(format: String = "yyyy-MM-dd HH:mm:ss") = SimpleDateFormat(format)
  */
 internal fun <T> convertBody(sis: ServletInputStream?, clz: Class<T>): T? {
     if (sis == null) {
+        println("convertBody sis is null ,clz is  ${clz.simpleName}")
         return null
     }
 
