@@ -25,7 +25,9 @@ class GitlabService : PlatformService {
     * 但是有时merge hook 又发出,则会出现两次通知(master分支的push hook测试后每次都有收到)
     * 因此在此处添加一个commitId作为判断依据,避免多次重复同样的消息
     */
-    private var lastMergeCommitSha: String? = ""
+    companion object {
+        var lastMergeCommitSha: String? = ""
+    }
 
     override fun process(req: HttpServletRequest?) {
         val gitlabHookType = req?.getHeader(KeyNames.HEADER_GITLAB)
@@ -72,6 +74,7 @@ class GitlabService : PlatformService {
 
                     Actions.MERGE -> {// merge请求被通过,通知相关所有人更新代码
                         val mergeCommitSha = objectAttributes.merge_commit_sha
+                        println("${msec2date()} processMergeHook $lastMergeCommitSha    $mergeCommitSha")
                         if (lastMergeCommitSha.isNullOrBlank() or
                                 !lastMergeCommitSha.equals(mergeCommitSha, ignoreCase = true)) {
                             lastMergeCommitSha = mergeCommitSha
@@ -117,6 +120,7 @@ class GitlabService : PlatformService {
             val after = if (it.after.isNullOrBlank()) it.checkout_sha else it.after
 
             // 若之前已经处理过该id的消息,则不作处理
+            println("${msec2date()} processPushHook $lastMergeCommitSha    $after")
             if (lastMergeCommitSha?.equals(after, ignoreCase = true) ?: false) {
                 return
             }
@@ -140,7 +144,7 @@ class GitlabService : PlatformService {
                 val matcher1 = p1.matcher(s1)
                 mergeInfo = matcher1.replaceAll("")
 
-                val sb = StringBuilder(100).apply {
+                StringBuilder(100).apply {
                     append("Gitlab: ${ConstantsPara.targetMergeBranch}分支有代码更新,请刷新本地代码\n")
                     append("项目: $repositoryName\n")
                     append("分支: ${ConstantsPara.targetMergeBranch}\n")

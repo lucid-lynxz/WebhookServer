@@ -18,8 +18,17 @@ object Router {
         req?.let {
             val userAgent = req.getHeader(KeyNames.HEADER_USER_AGENT)
             val gitlabHeader = req.getHeader(KeyNames.HEADER_GITLAB)
-            println("${msec2date()} Router userAgent is: $userAgent  ,gitlabHeader is: $gitlabHeader")
-            if (!gitlabHeader.isNullOrBlank()) {
+            val pathInfo = req.pathInfo
+            println("${msec2date()} Router userAgent is: $userAgent  ,gitlabHeader is: $gitlabHeader  ,req.pathInfo is: $pathInfo")
+            if (!pathInfo.isNullOrBlank()) {
+                if (pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true)) {
+                    HttpManager.refreshAccessToken()
+                } else if (pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true)) {
+                    HttpManager.getDepartmentInfo()
+                } else {
+                    println("cannot process this type of path, ignore....$pathInfo")
+                }
+            } else if (!gitlabHeader.isNullOrBlank()) {
                 GitlabService().process(req)
             } else if (!userAgent.isNullOrBlank()) {
                 if (userAgent.contains(KeyNames.HEADER_GIRA)) {
@@ -32,11 +41,7 @@ object Router {
                     println("connot process this type of user-agent: $userAgent")
                 }
             } else {
-                when {
-                    req.pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true) -> HttpManager.refreshAccessToken()
-                    req.pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true) -> HttpManager.getDepartmentInfo()
-                    else -> println("cannot process this type of request, ignore....${req.requestURL}")
-                }
+                println("cannot process this type of request, ignore....${req.requestURL}")
             }
         }
     }
