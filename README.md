@@ -33,11 +33,15 @@ gitlab_push_merge_branch=master
 2. `{serverHost}/action/updateDepartmentInfo` 请求该url会立即重新获取钉钉通讯录信息,用于用户更新了钉钉通讯录后主动触发服务器刷新数据
 
 ### 4. 效果介绍
-#### 1. gitlab相关gitlab_closed.png
+#### 1. gitlab相关
 ![gitlab有merge代码审核请求](./pic/gitlab_open_msg.png)
 ![gitlab有merge请求被关闭时,会通知提交人](./pic/gitlab_closed.png)
 ![gitlab有merge请求被reopen时,会通知审核人](./pic/gitlab_reopen.png)
 ![gitlab merge 请求被通过时,会通知相关项目部门所有成员更新代码](./pic/gitlab_merged.png)
+
+#### 2. jira相关
 ![jira上有新的 issue 被创建时,会通知issue归属用户](./pic/jira_issue_create.png)
 ![jira上有新的 issue 有更新时,会通知issue归属用户](./pic/jira_issue_update.png)
+
+#### 3. 蒲公英
 ![蒲公英上有新版本的app上传成功时,会通知指定用户](./pic/pgyer_new_version.png)
