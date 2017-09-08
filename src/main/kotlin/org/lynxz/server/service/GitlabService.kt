@@ -148,7 +148,7 @@ class GitlabService : PlatformService {
                     append("Gitlab: ${ConstantsPara.targetMergeBranch}分支有代码更新,请刷新本地代码\n")
                     append("项目: $repositoryName\n")
                     append("分支: ${ConstantsPara.targetMergeBranch}\n")
-                    append("概要: mergeInfo\n")
+                    append("概要: $mergeInfo\n")
                     append("服务器时间: ${msec2date()}")
                     HttpManager.sendTestMessageToDepartment(toString(), it.project.name, it.project.namespace)
                 }
