@@ -1,6 +1,6 @@
 > 使用Gradle和Kotlin重写一下之前 [钉钉通知服务器](https://github.com/lucid-lynxz/Webhook_server) 顺便再熟悉下服务端基本编写操作
 
-[博客: 打通gitlab与钉钉之间的额联系](https://juejin.im/post/5a433b206fb9a0452725de4f)
+[博客: 打通gitlab与钉钉之间的联系](https://juejin.im/post/5a433b206fb9a0452725de4f)
 
 ### 1. 配置 `config.properties` 文件参数
 clone项目后,请在项目根目录下创建 `src/main/webapp/config.properties` 并设置如下属性值,以便获取钉钉相关参数
