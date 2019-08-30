@@ -1,11 +1,9 @@
 package org.lynxz.server
 
-import com.sun.deploy.trace.Trace.flush
 import io.reactivex.Observable
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
 import org.lynxz.server.network.HttpManager
-import org.lynxz.server.util.CommonUtil
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -29,7 +27,6 @@ class ApiServlet : HttpServlet() {
 
     override fun init(config: ServletConfig?) {
         super.init(config)
-        CommonUtil.log2File("我就是试试")
         getConfigPath("config.properties").let {
             // 避免多次初始化
             if (ConstantsPara.dd_corp_id.isBlank()) {

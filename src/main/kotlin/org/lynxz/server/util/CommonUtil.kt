@@ -12,10 +12,7 @@ object CommonUtil {
      * */
     fun log2File(msg: String? = null) {
         if (!msg.isNullOrBlank()) {
-            fileLogger.info(msg)
-            fileLogger.warn(msg)
             fileLogger.error(msg)
-            fileLogger.fatal(msg)
         }
     }
 }
