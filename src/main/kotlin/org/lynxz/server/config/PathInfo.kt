@@ -5,7 +5,9 @@ package org.lynxz.server.config
  */
 object PathInfo {
     // 刷新token
-    val KEY_ACTION_REFRESH_TOKEN = "/action/refreshToken"
+    const val KEY_ACTION_REFRESH_TOKEN = "/action/refreshToken"
     // 重新获取通讯录
-    val KEY_ACTION_UPDATE_DEPARTMENT_INFO = "/action/updateDepartmentInfo"
+    const val KEY_ACTION_UPDATE_DEPARTMENT_INFO = "/action/updateDepartmentInfo"
+    // 保存数据到文件或者数据库中
+    const val KEY_ACTION_SAVE_DATA = "/action/save_data"
 }

@@ -34,6 +34,8 @@ gitlab_push_merge_branch=master
 ### 3. 功能url
 1. `{serverHost}/action/refreshToken` 重新刷新access_token,并重新获取通讯录
 2. `{serverHost}/action/updateDepartmentInfo` 请求该url会立即重新获取钉钉通讯录信息,用于用户更新了钉钉通讯录后主动触发服务器刷新数据
+3. `{serverHost}/action/save_data?**=**` 可以将 query 数据保存到文件中
+如: 1.1.1.1:8080/server-V0.1.4/action/updateDepartmentInfo
 
 ### 4. 效果介绍
 #### 1. gitlab相关

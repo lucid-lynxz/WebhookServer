@@ -1,10 +1,11 @@
 package org.lynxz.server
 
+import com.sun.deploy.trace.Trace.flush
 import io.reactivex.Observable
-import org.apache.logging.log4j.LogManager
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
 import org.lynxz.server.network.HttpManager
+import org.lynxz.server.util.CommonUtil
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -23,16 +24,15 @@ import kotlin.collections.HashMap
  * 对所有请求进行处理
  * 关于 [@WebServlet的使用](http://blog.csdn.net/maozi_bsz/article/details/46431189)
  */
-@WebServlet(name = "home", value = "/*", loadOnStartup = 1)
+@WebServlet(name = "home", value = ["/*"], loadOnStartup = 1)
 class ApiServlet : HttpServlet() {
-
-    private val logger = LogManager.getLogger()
 
     override fun init(config: ServletConfig?) {
         super.init(config)
+        CommonUtil.log2File("我就是试试")
         getConfigPath("config.properties").let {
             // 避免多次初始化
-            if (ConstantsPara.dd_corp_id.isNullOrBlank()) {
+            if (ConstantsPara.dd_corp_id.isBlank()) {
                 println("init configPath is $it \n${File(it).exists()}")
                 loadConfig(it)
                 // access_token有效期7200秒

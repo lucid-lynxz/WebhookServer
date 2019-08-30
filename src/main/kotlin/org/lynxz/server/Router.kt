@@ -7,6 +7,7 @@ import org.lynxz.server.service.GiraService
 import org.lynxz.server.service.GitlabService
 import org.lynxz.server.service.JenkinsService
 import org.lynxz.server.service.PgyerService
+import org.lynxz.server.util.CommonUtil
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -21,24 +22,20 @@ object Router {
             val pathInfo = req.pathInfo
             println("${msec2date()} Router userAgent is: $userAgent  ,gitlabHeader is: $gitlabHeader  ,req.pathInfo is: $pathInfo")
             if (!pathInfo.isNullOrBlank()) {
-                if (pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true)) {
-                    HttpManager.refreshAccessToken()
-                } else if (pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true)) {
-                    HttpManager.getDepartmentInfo()
-                } else {
-                    println("cannot process this type of path, ignore....$pathInfo")
+                when {
+                    pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true) -> HttpManager.refreshAccessToken()
+                    pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true) -> HttpManager.getDepartmentInfo()
+                    pathInfo.endsWith(PathInfo.KEY_ACTION_SAVE_DATA, true) -> CommonUtil.log2File(req.queryString)
+                    else -> println("cannot process this type of path, ignore....$pathInfo")
                 }
             } else if (!gitlabHeader.isNullOrBlank()) {
                 GitlabService().process(req)
             } else if (!userAgent.isNullOrBlank()) {
-                if (userAgent.contains(KeyNames.HEADER_GIRA)) {
-                    GiraService().process(req)
-                } else if (userAgent.contains(KeyNames.HEADER_PGYER)) {
-                    PgyerService().process(req)
-                } else if (userAgent.contains(KeyNames.HEADER_JENKINS_PGYER)) {
-                    JenkinsService().process(req)
-                } else {
-                    println("connot process this type of user-agent: $userAgent")
+                when {
+                    userAgent.contains(KeyNames.HEADER_GIRA) -> GiraService().process(req)
+                    userAgent.contains(KeyNames.HEADER_PGYER) -> PgyerService().process(req)
+                    userAgent.contains(KeyNames.HEADER_JENKINS_PGYER) -> JenkinsService().process(req)
+                    else -> println("connot process this type of user-agent: $userAgent")
                 }
             } else {
                 println("cannot process this type of request, ignore....${req.requestURL}")

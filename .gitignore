@@ -33,3 +33,6 @@ src/main/java/
 src/main/resources/
 src/main/webapp/WEB-INF/
 src/test/
+
+out/
+local.properties
