@@ -33,7 +33,7 @@ class JenkinsService : PlatformService {
                         append("二维码链接: ${it.appQRCodeURL}\n")
                     }
                     append("服务器时间: ${msec2date()}")
-                    HttpManager.sendTextMessage(userName, toString())
+                    HttpManager.sendTextMessage(userName, null, toString())
                 }
             }
         }

@@ -60,7 +60,7 @@ class GitlabService : PlatformService {
                         append("请求概要: ${objectAttributes.title}\n")
                         append("服务器时间: ${msec2date()}\n")
                         append("审核地址: ${objectAttributes.url}")
-                        HttpManager.sendTextMessage(it.assignee.name, toString())
+                        HttpManager.sendTextMessage(it.assignee.name, null, toString())
                     }
 
                     Actions.CLOSE -> {// merge请求被关闭的时候,通知提交请求的人
@@ -69,7 +69,7 @@ class GitlabService : PlatformService {
                                 .append("目标分支: ${objectAttributes.target_branch}\n")
                                 .append("概要: ${objectAttributes.title}\n")
                                 .append("服务器时间: ${msec2date()}")
-                        HttpManager.sendTextMessage(user.name, toString())
+                        HttpManager.sendTextMessage(user.name, null, toString())
                     }
 
                     Actions.MERGE -> {// merge请求被通过,通知相关所有人更新代码
@@ -96,7 +96,7 @@ class GitlabService : PlatformService {
                         append("请求概要: ${objectAttributes.title}\n")
                         append("服务器时间: ${msec2date()}\n")
                         append("审核地址: ${objectAttributes.url}")
-                        HttpManager.sendTextMessage(it.assignee.name, toString())
+                        HttpManager.sendTextMessage(it.assignee.name, null, toString())
                     }
                 }
             }

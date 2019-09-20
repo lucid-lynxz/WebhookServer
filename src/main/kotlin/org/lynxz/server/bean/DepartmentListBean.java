@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by lynxz on 08/03/2017.
+ * 部门列表信息
  */
 public class DepartmentListBean {
 

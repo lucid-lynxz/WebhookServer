@@ -23,7 +23,7 @@ class PgyerService : PlatformService {
                     append("下载链接: ${it.link}\n")
                     append("二维码链接: ${it.appQRCodeURL}\n")
                     append("服务器时间: ${msec2date()}")
-                    HttpManager.sendTextMessage(ConstantsPara.defaultNoticeUserName, toString())
+                    HttpManager.sendTextMessage(ConstantsPara.defaultNoticeUserName, null, toString())
                 }
             }
         }

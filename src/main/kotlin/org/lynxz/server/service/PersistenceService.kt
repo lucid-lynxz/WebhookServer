@@ -25,7 +25,7 @@ class PersistenceService : PlatformService {
                     append("名称: ${it.title}\n")
                     append("详情: ${it.message}\n")
                     append("服务器时间: ${msec2date()}")
-                    HttpManager.sendTextMessage(ConstantsPara.defaultNoticeUserName, toString())
+                    HttpManager.sendTextMessage(ConstantsPara.defaultNoticeUserName, null, toString())
                 }
             }
         }

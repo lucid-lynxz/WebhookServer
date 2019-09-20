@@ -10,4 +10,7 @@ object PathInfo {
     const val KEY_ACTION_UPDATE_DEPARTMENT_INFO = "/action/updateDepartmentInfo"
     // 保存数据到文件或者数据库中
     const val KEY_ACTION_SAVE_DATA = "/action/save_data"
+    // 发送钉钉消息给指定用户或部门
+    const val KEY_ACTION_SEND_MSG = "/action/send_msg"
+
 }

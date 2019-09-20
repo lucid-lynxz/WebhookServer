@@ -75,12 +75,12 @@ class GiraService : PlatformService {
                     }
 
                     append("点击查看: $url\n")
-                    append("服务器时间: ${msec2date()}")
+                     append("服务器时间: ${msec2date()}")
                 }
 
 //                println("要发送的jira信息为: $sb")
                 assigneeName = if (assigneeName.isNullOrBlank()) ConstantsPara.defaultNoticeUserName else assigneeName
-                HttpManager.sendTextMessage(assigneeName, sb.toString())
+                HttpManager.sendTextMessage(assigneeName, null, sb.toString())
             }
         }
     }

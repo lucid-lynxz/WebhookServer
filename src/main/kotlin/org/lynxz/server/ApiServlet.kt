@@ -85,7 +85,7 @@ class ApiServlet : HttpServlet() {
     }
 
     //将配置文件放置于 src/main/webapp 目录下
-    fun getConfigPath(fileName: String) = "${servletContext.getRealPath("/")}$fileName"
+    private fun getConfigPath(fileName: String) = "${servletContext.getRealPath("/")}$fileName"
 
     /**
      * 获取header信息

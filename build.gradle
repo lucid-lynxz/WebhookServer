@@ -1,10 +1,10 @@
 group 'org.lynxz.server'
-version 'V0.1.5'
+version 'V0.1.6'
 description "添加log4j2.xml,保存日志在 logs/log4j2/ 下"
 
 buildscript {
     ext {
-        kotlin_version = '1.3.11'
+        kotlin_version = '1.3.50'
 
         gson_version = '2.8.5'
         retrofit_version = '2.3.0'
