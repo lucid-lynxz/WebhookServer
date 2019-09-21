@@ -36,6 +36,18 @@ gitlab_push_merge_branch=master
 2. `{serverHost}/action/updateDepartmentInfo` 请求该url会立即重新获取钉钉通讯录信息,用于用户更新了钉钉通讯录后主动触发服务器刷新数据
 3. `{serverHost}/action/save_data?**=**` 可以将 query 数据保存到文件中
 如: 1.1.1.1:8080/server-V0.1.4/action/updateDepartmentInfo
+4. `{serverHost}/action/send_msg` post 请求,发送消息给指定的人员或者部门
+```shell
+curl -d "{\"name\":\"\",\"mobile\":\"\",\"content\":\"消息内容\",\"departmentName\":\"部门名称\"}" {serverHost}/action/send_msg
+```
+name: 可空,钉钉用户姓名或者备注名
+mobile: 可空, 钉钉用户手机号,优先匹配
+content: 要发送的消息
+departmentName: 用户所在部门名称
+
+服务端会查询 `departmentName` 部门下的 手机号和名称相符的用户, 若查得到,则发消息给他
+否则,发送消息给该部门所有人
+
 
 ### 4. 效果介绍
 #### 1. gitlab相关
