@@ -55,7 +55,7 @@ object ConstantsPara {
 
     /**
      * 通过tg getUpdates接口获取其所有的chat id信息
-     * key: bot_token + "_" + userName 以便通过接口快速将消息发送给指定人员的bot聊天窗口
+     * key: bot_token + "_" + userName/first_name 以便通过接口快速将消息发送给指定人员的bot聊天窗口
      * value: chat_id
      * */
     var tgChatInfoMap = mutableMapOf<String, Long>()

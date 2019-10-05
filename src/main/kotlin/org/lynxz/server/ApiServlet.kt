@@ -58,8 +58,8 @@ class ApiServlet : HttpServlet() {
             characterEncoding = "UTF-8"
             // 返回给客户端的数据
             writer.apply {
-                //                write("{\"serverTime\":\"${msec2date()}\"}") // 使用println(...) 等效
-                write("${msec2date()} hello, I'm running...") // 使用println(...) 等效
+                // todo 2019.10.5 返回实际调用结果
+                write("{\"serverTime\":\"${msec2date()} hello, I'm running...\"}") // 使用println(...) 等效
                 flush()
                 close()
             }

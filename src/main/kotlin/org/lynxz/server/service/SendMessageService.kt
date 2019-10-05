@@ -20,6 +20,11 @@ class SendMessageService : PlatformService {
                     if (it.name.isNullOrBlank()) {
                         it.name = ConstantsPara.defaultTgUserName
                     }
+
+                    if (it.tgBotToken.isBlank()) {
+                        it.tgBotToken = ConstantsPara.defaultTgBotToken
+                    }
+
                     val key = "${it.tgBotToken}_${it.name}"
                     val doOnComplete = {
                         val chatId = ConstantsPara.tgChatInfoMap[key]

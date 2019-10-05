@@ -50,11 +50,11 @@ curl -d "{\"name\":\"\",\"mobile\":\"\",\"content\":\"消息内容\",\"departmen
 ```shell
 curl -d "{\"name\":\"目标用户userName\",\"imType\":\"Telegram\",\"content\":\"消息内容\",\"tgBotToken\":\"tg bot token\"}" {serverHost}/action/send_msg
 ```
-name: 可空,钉钉用户姓名或者备注名
+name: 发送钉钉消息时可空,钉钉用户姓名或者备注名, 发送tg消息时必填,为用户昵称或者userName
+content: 必填,要发送的消息
 mobile: 可空, 钉钉用户手机号,优先匹配
-content: 要发送的消息
-departmentName: 用户所在部门名称
-imType: 用于发送的IM类型,目前支持两种: Telegram 和 DingDing, 默认为 DingDing
+imType: 可空,用于发送的IM类型,目前支持两种: Telegram 和 DingDing, 默认为 DingDing
+departmentName: 发送钉钉消息时必填,为用户所在部门名称
 tgBotToken: 用于接收消息的tg机器人token,默认值为 `config.properties` 中 `tg_bot_token`
 
 服务端会查询 `departmentName` 部门下的 手机号和名称相符的用户, 若查得到,则发消息给他

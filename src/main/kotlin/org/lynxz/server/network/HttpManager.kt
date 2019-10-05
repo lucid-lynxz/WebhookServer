@@ -232,8 +232,17 @@ object HttpManager {
                                 it.message?.chat?.type == "private"
                             }?.forEach {
                                 it.message?.chat?.let { chat ->
-                                    val key = "${botToken}_${chat.username}"
-                                    chatMap.put(key, chat.id)
+                                    // userName可能为空,缓存userName和firstName,减少客户端对接成本
+                                    val firstName = chat.first_name
+                                    val userName = chat.username
+
+                                    if (!firstName.isNullOrBlank()) {
+                                        chatMap["${botToken}_$firstName"] = chat.id
+                                    }
+
+                                    if (!userName.isNullOrBlank()) {
+                                        chatMap["${botToken}_$userName"] = chat.id
+                                    }
                                 }
                             }
                             ConstantsPara.tgChatInfoMap = chatMap

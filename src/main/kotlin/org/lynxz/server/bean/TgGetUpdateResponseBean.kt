@@ -96,10 +96,10 @@ data class Message(
 )
 
 data class MessageChat(
-        val first_name: String,
+        val first_name: String?, // 昵称
         val id: Long,
         val type: String,
-        val username: String
+        val username: String? // userName
 )
 
 data class From(
