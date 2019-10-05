@@ -17,6 +17,9 @@ class SendMessageService : PlatformService {
         convertBody(req?.inputStream, SendMessageReqBean::class.java)?.let {
             when (it.imType) {
                 ImType.TG -> {
+                    if (it.name.isNullOrBlank()) {
+                        it.name = ConstantsPara.defaultTgUserName
+                    }
                     val key = "${it.tgBotToken}_${it.name}"
                     val doOnComplete = {
                         val chatId = ConstantsPara.tgChatInfoMap[key]
