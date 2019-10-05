@@ -19,6 +19,12 @@ defaultNoticeUserName="张三"
 jira_borwse_url=http://jira.soundbus.tech/browse/
 # gitlab合并的目标分支是该分支时, 此hook请求才需要发送钉钉消息,不填的话,默认master
 gitlab_push_merge_branch=master
+
+#---IM-Telegram 配置---
+# 用于接收消息的默认bot token
+tg_bot_token=9749123470:abced
+# 默认接收消息的tg用户username
+tg_user_name=helobotxxx
 ```
 
 ### 2. 通讯录规则
@@ -36,18 +42,29 @@ gitlab_push_merge_branch=master
 2. `{serverHost}/action/updateDepartmentInfo` 请求该url会立即重新获取钉钉通讯录信息,用于用户更新了钉钉通讯录后主动触发服务器刷新数据
 3. `{serverHost}/action/save_data?**=**` 可以将 query 数据保存到文件中
 如: 1.1.1.1:8080/server-V0.1.4/action/updateDepartmentInfo
-4. `{serverHost}/action/send_msg` post 请求,发送消息给指定的人员或者部门
+4. `{serverHost}/action/send_msg` post 请求,发送消息给钉钉指定的人员或者部门
 ```shell
 curl -d "{\"name\":\"\",\"mobile\":\"\",\"content\":\"消息内容\",\"departmentName\":\"部门名称\"}" {serverHost}/action/send_msg
+```
+5. `{serverHost}/action/send_msg` post 请求,发送消息给钉tg指定用户
+```shell
+curl -d "{\"name\":\"目标用户userName\",\"imType\":\"Telegram\",\"content\":\"消息内容\",\"tgBotToken\":\"tg bot token\"}" {serverHost}/action/send_msg
 ```
 name: 可空,钉钉用户姓名或者备注名
 mobile: 可空, 钉钉用户手机号,优先匹配
 content: 要发送的消息
 departmentName: 用户所在部门名称
+imType: 用于发送的IM类型,目前支持两种: Telegram 和 DingDing, 默认为 DingDing
+tgBotToken: 用于接收消息的tg机器人token,默认值为 `config.properties` 中 `tg_bot_token`
 
 服务端会查询 `departmentName` 部门下的 手机号和名称相符的用户, 若查得到,则发消息给他
 否则,发送消息给该部门所有人
 
+### 4. telegram bot使用
+1. 在tg中,`@BotFather` - `/newbot` - `输入任意名称说明` - `输入以 _bot 结尾的名称` - `成功,得到token`
+2. 将上述得到的botToken信息填入 `src/main/webapp/config.properties` 中的 `tg_bot_token` 字段
+3. 将你的tg userName填入 `src/main/webapp/config.properties` 中的 `tg_user_name` 字段,用于默认接收消息用户
+4. 任意发送一条消息给上面创建的bot
 
 ### 4. 效果介绍
 #### 1. gitlab相关

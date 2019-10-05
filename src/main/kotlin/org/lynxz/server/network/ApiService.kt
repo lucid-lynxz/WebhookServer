@@ -2,10 +2,7 @@ package org.lynxz.server.network
 
 import io.reactivex.Observable
 import org.lynxz.server.bean.*
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Created by lynxz on 25/08/2017.
@@ -44,5 +41,18 @@ interface ApiService {
      */
     @POST("message/send")
     fun sendTextMessage(@Body bean: MessageTextBean): Observable<MessageResponseBean>
+
+
+    /**
+     * [tg getUpdates](https://core.telegram.org/bots/api#getupdates)
+     * */
+    @GET
+    fun getTgUpdates(@Url url: String): Observable<TgGetUpdateResponseBean>
+
+    /**
+     * [向tg发送消息](https://core.telegram.org/bots/api#sendmessage)
+     * */
+    @POST
+    fun sendTgBotMessage(@Url url: String, @Body bean: TgSendMessageReqBean): Observable<TgSendMessageRespBean>
 
 }

@@ -21,6 +21,11 @@ object KeyNames {
     val defaultAssignee = "defaultAssignee"
     val gitlabPushMergeBranch = "gitlab_push_merge_branch"
 
+    // tg相关
+    val defaultTgBotToken = "tg_bot_token"
+    val defaultTgUserName = "tg_user_name"
+
+
     // httpServlet获取header信息时需要
     val HEADER_USER_AGENT = "user-agent"
     // header中user-agent字段可能包含如下属性

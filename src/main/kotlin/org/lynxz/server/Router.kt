@@ -20,7 +20,10 @@ object Router {
             println("${msec2date()} Router userAgent is: $userAgent  ,gitlabHeader is: $gitlabHeader  ,req.pathInfo is: $pathInfo")
             if (!pathInfo.isNullOrBlank()) {
                 when {
-                    pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true) -> HttpManager.refreshAccessToken()
+                    pathInfo.endsWith(PathInfo.KEY_ACTION_REFRESH_TOKEN, true) -> {
+                        HttpManager.refreshAccessToken()
+                        HttpManager.getTgBotUpdates()
+                    }
                     pathInfo.endsWith(PathInfo.KEY_ACTION_UPDATE_DEPARTMENT_INFO, true) -> HttpManager.getDepartmentInfo()
                     pathInfo.endsWith(PathInfo.KEY_ACTION_SAVE_DATA, true) -> CommonUtil.log2File(req.queryString)
                     pathInfo.endsWith(PathInfo.KEY_ACTION_SEND_MSG, true) -> SendMessageService().process(req)

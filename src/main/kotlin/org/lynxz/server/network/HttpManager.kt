@@ -10,10 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.lynxz.server.bean.AccessTokenBean
-import org.lynxz.server.bean.DepartmentMemberDetailListBean
-import org.lynxz.server.bean.MessageResponseBean
-import org.lynxz.server.bean.MessageTextBean
+import org.lynxz.server.bean.*
 import org.lynxz.server.config.ConstantsPara
 import org.lynxz.server.config.KeyNames
 import org.lynxz.server.config.MessageType
@@ -205,6 +202,74 @@ object HttpManager {
                     }
         }
     }
+
+
+    /**
+     * 获取tg bot的所有聊天信息,主要用于获取 chat_id
+     * */
+    fun getTgBotUpdates(botToken: String = ConstantsPara.defaultTgBotToken, doOnComplete: () -> Unit = {}) {
+        apiService.getTgUpdates("https://api.telegram.org/bot$botToken/getUpdates")
+                .retry(1)
+                .subscribe(object : Observer<TgGetUpdateResponseBean> {
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        addDisposable(d)
+                    }
+
+                    override fun onComplete() {
+                        doOnComplete.invoke()
+                    }
+
+                    override fun onNext(t: TgGetUpdateResponseBean) {
+                        if (t.ok) {
+                            val chatMap = mutableMapOf<String, Long>()
+
+                            t.result?.filter {
+                                // 只取私聊,非channel/group机器人
+                                it.message?.chat?.type == "private"
+                            }?.forEach {
+                                it.message?.chat?.let { chat ->
+                                    val key = "${botToken}_${chat.username}"
+                                    chatMap.put(key, chat.id)
+                                }
+                            }
+                            ConstantsPara.tgChatInfoMap = chatMap
+                        }
+                    }
+                })
+    }
+
+    /**
+     * 通过bot,发送tg消息给指定人员
+     * */
+    fun sendTgMessage(body: TgSendMessageReqBean, botToken: String = ConstantsPara.defaultTgBotToken) {
+        if (!body.isValid()) {
+            print("发送tg消息失败,内容异常,请检查$body")
+            return
+        }
+        apiService.sendTgBotMessage("https://api.telegram.org/bot$botToken/sendMessage", body)
+                .retry(1)
+                .subscribe(object : Observer<TgSendMessageRespBean> {
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        addDisposable(d)
+                    }
+
+                    override fun onComplete() {
+                    }
+
+                    override fun onNext(t: TgSendMessageRespBean) {
+                        println("发送消息给tg bot $botToken, 结果: ${t.ok}\n内容:${t.result?.text}")
+                    }
+                })
+    }
+
 
     fun addDisposable(d: Disposable) {
         compositeDisposable.add(d)

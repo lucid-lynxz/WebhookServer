@@ -34,7 +34,10 @@ class ApiServlet : HttpServlet() {
                 loadConfig(it)
                 // access_token有效期7200秒
                 Observable.interval(0, 3600, TimeUnit.SECONDS)
-                        .subscribe { HttpManager.refreshAccessToken() }
+                        .subscribe {
+                            HttpManager.refreshAccessToken()
+                            HttpManager.getTgBotUpdates()
+                        }
             }
         }
     }
@@ -79,6 +82,8 @@ class ApiServlet : HttpServlet() {
                 ConstantsPara.jiraUrl = getProperty(KeyNames.jiraUrl)
                 ConstantsPara.defaultNoticeUserName = getProperty(KeyNames.defaultNoticeUserName)
                 ConstantsPara.targetMergeBranch = getProperty(KeyNames.gitlabPushMergeBranch)
+                ConstantsPara.defaultTgBotToken = getProperty(KeyNames.defaultTgBotToken)
+                ConstantsPara.defaultTgUserName = getProperty(KeyNames.defaultTgUserName)
                 println("the corp id is: ${ConstantsPara.dd_corp_id}  ,defaultNoticeUserName = ${ConstantsPara.defaultNoticeUserName}")
             }
         }

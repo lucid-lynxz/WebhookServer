@@ -42,4 +42,21 @@ object ConstantsPara {
      * 处理gitlab push or merge hook时, 目标分支匹配时才认为是合并请求
      * */
     var targetMergeBranch = "master"
+
+    /**
+     * 默认发送的目标tg bot token信息
+     * */
+    var defaultTgBotToken = ""
+
+    /**
+     * 发送消息给bot时,默认的接收用户
+     * */
+    var defaultTgUserName = ""
+
+    /**
+     * 通过tg getUpdates接口获取其所有的chat id信息
+     * key: bot_token + "_" + userName 以便通过接口快速将消息发送给指定人员的bot聊天窗口
+     * value: chat_id
+     * */
+    var tgChatInfoMap = mutableMapOf<String, Long>()
 }
